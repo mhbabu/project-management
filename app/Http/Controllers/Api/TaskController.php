@@ -29,6 +29,7 @@ class TaskController extends Controller
         // Set the assigned_by field to the current user
         $validatedData                = $request->validated();
         $validatedData['assigned_by'] = $currentUser->id;
+        $validatedData['status']      = 'pending'; // Initial status for assigned_to required
         $task                         = Task::create($validatedData);
 
         if(!empty($task->assigned_to)){
@@ -58,9 +59,11 @@ class TaskController extends Controller
         }
 
         // Update the task
-        $task->update($request->validated());
+        $validatedData    = $request->validated();
+        $sameAssignedUser = $task->assigned_to === $validatedData['assigned_to'] ? true : false;
+        $task->update($validatedData);
 
-        if(!empty($task->assigned_to) && $task->assigned_to != $request->assigned_to){
+        if(!$sameAssignedUser){ // Dispatch Soket Message if assigned_to changed
             TaskAssignedEvent::dispatch($task);
         }
 
