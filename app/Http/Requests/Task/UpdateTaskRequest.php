@@ -36,7 +36,7 @@ class UpdateTaskRequest extends FormRequest
             'description' => 'nullable|string',
             'status'      => 'nullable|in:pending,in_progress,completed',
             'assigned_to' => [
-                'nullable',
+                'required',
                 'exists:users,id',
                 function ($attribute, $value, $fail) {
                     $user = User::find($value);
@@ -46,8 +46,8 @@ class UpdateTaskRequest extends FormRequest
                 },
             ],
             'due_date'    => [
+                'required',
                 'date',
-                'required_if:assigned_to,!=,null',
                 'date_format:Y-m-d',
                 'after_or_equal:today'
             ],

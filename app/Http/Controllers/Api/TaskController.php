@@ -11,7 +11,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
-{
+{ 
     public function index(Request $request)
     {
         $tasks = Task::paginate($request->input('per_page', 15));
@@ -32,7 +32,6 @@ class TaskController extends Controller
         $task                         = Task::create($validatedData);
 
         if(!empty($task->assigned_to)){
-            $task->update(['status' => 'pending']);
             TaskAssignedEvent::dispatch($task);
         }
         
@@ -60,6 +59,10 @@ class TaskController extends Controller
 
         // Update the task
         $task->update($request->validated());
+
+        if(!empty($task->assigned_to) && $task->assigned_to != $request->assigned_to){
+            TaskAssignedEvent::dispatch($task);
+        }
 
         return new TaskResource($task);
     }
