@@ -21,5 +21,22 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function subtasks()
+    {
+        return $this->hasManyThrough(
+            Subtask::class,
+            Task::class,
+            'project_id', // Foreign key on the tasks table
+            'task_id',    // Foreign key on the subtasks table
+            'id',         // Local key on the projects table
+            'id'          // Local key on the tasks table
+        );
+    }
+
+    public function totalSubtasks()
+    {
+        return $this->subtasks()->count();
+    }
+
     
 }
