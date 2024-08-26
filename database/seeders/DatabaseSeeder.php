@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
         ]);
 
-        // Seed projects, tasks, and subtasks
-        // Project::factory(10)->create()->each(function ($project) {
-        //     Task::factory(5)->create(['project_id' => $project->id])->each(function ($task) {
-        //         Subtask::factory(3)->create(['task_id' => $task->id]);
-        //     });
-        // });
+        User::factory(20)->create();
+        Project::factory(10)->create()->each(function ($project) {
+            Task::factory(5)->create(['project_id' => $project->id])->each(function ($task) {
+                Subtask::factory(3)->create(['task_id' => $task->id]);
+            });
+        });
     }
 }

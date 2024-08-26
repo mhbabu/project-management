@@ -12,22 +12,20 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TaskFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     protected $model = Task::class;
 
     public function definition()
     {
+        $adminOrLeader = User::whereIn('type', ['admin', 'team-leader'])->inRandomOrder()->first();
+        $developer = User::where('type', 'developer')->inRandomOrder()->first();
+
         return [
             'project_id'    => Project::inRandomOrder()->first()->id,
-            'title'         => $this->faker->sentence(4),
+            'title'         => $this->faker->sentence,
             'description'   => $this->faker->paragraph,
             'status'        => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
-            'assigned_to'   => User::inRandomOrder()->first()->id,
-            'assigned_by'   => User::inRandomOrder()->first()->id,
+            'assigned_to'   => $developer->id,
+            'assigned_by'   => $adminOrLeader->id,
             'due_date'      => $this->faker->dateTimeBetween('now', '+1 year'),
             'completed_at'  => null,
         ];

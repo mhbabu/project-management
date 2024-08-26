@@ -20,27 +20,35 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $project = Project::create($request->validated());
-
         return new ProjectResource($project);
     }
 
-    public function show(Project $project)
+    public function show($projectId)
     {
+        $project = Project::find($projectId);
+        if (!$project) return response()->json([ 'message' => 'Project not found.'], 404);
+
         $project->load('teamLeader', 'tasks.subtasks'); // Eager load related data
         return new ProjectResource($project);
     }
 
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, $projectId)
     {
+        $project = Project::find($projectId);
+        if (!$project) return response()->json([ 'message' => 'Project not found.'], 404);
+        
         $project->update($request->validated());
-
         return new ProjectResource($project);
     }
 
-    public function destroy(Project $project)
+    public function destroy($projectId)
     {
-        $project->delete();
+        $project = Project::find($projectId);
+        if (!$project) return response()->json([ 'message' => 'Project not found.'], 404);
 
-        return response()->json(null, 204);
+        $project->delete();
+        return response()->json([
+            'message' => 'Project deleted successfully.',
+        ], 200);
     }
 }

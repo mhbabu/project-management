@@ -2,12 +2,18 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProjectController;
-use App\Http\Controllers\SubtaskController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\Api\SubtaskController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+
+
+Route::get('user/team-leaders', [UserController::class, 'getTeamLeaders']);
+Route::get('user/developers', [UserController::class, 'getDevelopers']);
+
 
 Route::middleware(['jwt.verify'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);

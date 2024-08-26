@@ -19,8 +19,8 @@ class TaskResource extends JsonResource
             'title'       => $this->title,
             'description' => $this->description,
             'status'      => $this->status,
-            'assigned_to' => new UserResource($this->assignedTo),
-            'assigned_by' => new UserResource($this->assignedBy),
+            'assigned_to' => new UserInfoResource($this->assignedTo),
+            'assigned_by' => new UserInfoResource($this->assignedBy),
             'subtasks'    => SubtaskResource::collection($this->subtasks),
             'created_at'  => $this->created_at,
             'updated_at'  => $this->updated_at

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubtaskResource extends JsonResource
+class TaskInfoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,10 +19,8 @@ class SubtaskResource extends JsonResource
             'title'       => $this->title,
             'description' => $this->description,
             'status'      => $this->status,
-            'assigned_to' => new UserInfoResource($this->assignedTo),
-            'assigned_by' => new UserInfoResource($this->assignedBy),
             'created_at'  => $this->created_at,
-            'updated_at'  => $this->updated_at,
+            'updated_at'  => $this->updated_at
         ];
     }
 }
