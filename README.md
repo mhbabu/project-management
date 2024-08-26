@@ -19,6 +19,9 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
    php artisan migrate --seed
 - then run
    ````bash
+   php artisan serve
+- then run
+   ````bash
    npm run dev
 
 - then run
