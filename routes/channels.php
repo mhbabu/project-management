@@ -8,6 +8,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('task.user.{userId}', function (User $user, int $userId) {
-    info('hitting...');
+    return $user->id === $userId ? $user : null;
+});
+
+Broadcast::channel('subtask.user.{userId}', function (User $user, int $userId) {
     return $user->id === $userId ? $user : null;
 });

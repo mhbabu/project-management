@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use App\Http\Resources\SubtaskInfoResource;
 use App\Http\Resources\TaskInfoResource;
+use App\Models\Subtask;
 use App\Models\Task;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,24 +14,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TaskAssignedEvent implements ShouldBroadcast
+class SubtaskAssignEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Task $task;
+    public Subtask $subtask;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Subtask $subtask)
     {
-        $this->task = $task;
+        $this->subtask = $subtask;
     }
 
     public function broadcastWith(): array
     {
         return [
-            'data' => new TaskInfoResource($this->task)
+            'data' => new SubtaskInfoResource($this->subtask)
         ];
     }
 
@@ -40,11 +42,11 @@ class TaskAssignedEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        $teamLeaderId  = $this->task->project->team_leader_id;
+        $teamLeaderId  = $this->subtask->task->project->team_leader_id;
 
         return [
-            new PrivateChannel('task.user.' . $this->task->assigned_to),
-            new PrivateChannel('task.user.' . $teamLeaderId),
+            new PrivateChannel('subtask.user.' . $this->subtask->assigned_to), // we can use previous channel but not using here
+            new PrivateChannel('subtask.user.' . $teamLeaderId),
         ];
     }
 }
